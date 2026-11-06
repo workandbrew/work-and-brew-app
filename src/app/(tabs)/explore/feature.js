@@ -21,7 +21,7 @@ export default function Feature() {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: colors.bg }} contentContainerStyle={{ paddingBottom: NAV_CLEARANCE + insets.bottom }} showsVerticalScrollIndicator={false}>
       <View style={[s.art, { height: Math.round(Math.min(460, Math.max(260, width * 0.75))) }]}>
-        {f.photo ? <Image source={imageSource(f.photo)} style={{ width: '100%', height: '100%' }} resizeMode="cover" accessibilityLabel={`${cafe.name} storefront`} /> : <CafeArt palette="slate" mirror />}
+        {f.headerPhoto || f.photo ? <Image source={imageSource(f.headerPhoto || f.photo)} style={{ width: '100%', height: '100%' }} resizeMode="cover" accessibilityLabel={`${cafe.name} storefront`} /> : <CafeArt palette="slate" mirror />}
         <CircleButton icon="back" label="Go back" style={[s.back, { top: insets.top + 6, left: gutter - 4 }]} onPress={() => router.back()} />
       </View>
       <View style={[s.body, { paddingHorizontal: gutter }]}>
@@ -42,6 +42,9 @@ export default function Feature() {
         <AmenityGrid cafe={cafe} limit={4} />
         <Text style={s.h2}>What to order</Text>
         <Text style={s.p}>{f.order}</Text>
+        {f.orderPhoto ? (
+          <Image source={imageSource(f.orderPhoto)} style={s.orderImg} resizeMode="cover" accessibilityLabel={`What to order at ${cafe.name}`} />
+        ) : null}
         <View style={s.btns}>
           <Button title="See on map" icon="map" style={{ flex: 1 }} onPress={() => router.push(`/map/cafe/${cafe.id}`)} />
           <Button title="Work here" icon="timer" variant="primary" style={{ flex: 1 }}
@@ -67,5 +70,6 @@ const s = StyleSheet.create({
   p: { fontFamily: fonts.regular, fontSize: 15, lineHeight: 25, color: colors.text },
   quote: { borderLeftWidth: 3, borderLeftColor: colors.steel, paddingLeft: 18, marginTop: 22 },
   quoteText: { fontFamily: fonts.displaySemi, fontSize: 19, lineHeight: 27, color: colors.text },
+  orderImg: { width: '100%', aspectRatio: 4 / 3, borderRadius: 12, marginTop: 14 },
   btns: { flexDirection: 'row', gap: 10, marginTop: 22 },
 });

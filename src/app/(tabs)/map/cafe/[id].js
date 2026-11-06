@@ -25,10 +25,12 @@ export default function CafeDetail() {
   const saved = isSaved(cafe.id);
 
   const directions = () => {
-    const q = encodeURIComponent(`${cafe.name}, ${cafe.neighborhood}`);
+    // Search by name and any confirmed address parts; skip [placeholders].
+    const parts = [cafe.name, cafe.address, cafe.neighborhood, cafe.borough, 'New York'].filter((x) => x && !x.includes('['));
+    const q = encodeURIComponent(parts.join(', '));
     const url = Platform.OS === 'ios'
-      ? `http://maps.apple.com/?daddr=${cafe.lat},${cafe.lng}&q=${q}`
-      : `https://www.google.com/maps/dir/?api=1&destination=${cafe.lat},${cafe.lng}`;
+      ? `http://maps.apple.com/?q=${q}`
+      : `https://www.google.com/maps/search/?api=1&query=${q}`;
     Linking.openURL(url);
   };
 
@@ -37,6 +39,7 @@ export default function CafeDetail() {
       <View style={s.head}>
         <View style={{ flex: 1 }}>
           <Text style={s.name}>{cafe.name}</Text>
+          {cafe.subtitle ? <Text style={s.sub}>{cafe.subtitle}</Text> : null}
           <Text style={s.sub}>{cafe.neighborhood}, {cafe.borough} · {cafe.distanceMi} mi</Text>
         </View>
         <CircleButton icon="close" label="Close" size={52} onPress={() => (router.canGoBack() ? router.back() : router.replace('/map'))} />

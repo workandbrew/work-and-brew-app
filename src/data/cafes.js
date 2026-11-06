@@ -1,33 +1,36 @@
 // Sample data from the wireframe. Hours, ratings, and scout notes are placeholders.
 // Shape mirrors the planned Supabase `cafes` table (see docs/BACKEND.md).
 
-export const NEIGHBORHOODS = ['Crown Heights', 'East Village', 'Flatiron', "Hell's Kitchen"];
+export const NEIGHBORHOODS = ['East Village', 'Flatiron', "Hell's Kitchen"];
 
 export const CAFES = [
   {
-    id: 'koffee',
-    name: 'Koffee',
-    neighborhood: 'Crown Heights',
-    borough: 'Brooklyn',
+    // Details in [brackets] still need confirming from a scout visit.
+    id: 'lalins',
+    name: "Lalin's",
+    subtitle: 'Coffee shop & wine bar',
+    address: '1131 [Street]',
+    neighborhood: '[Neighborhood]',
+    borough: '[Borough]',
     distanceMi: 0.2,
-    openUntil: '7 PM',
+    openUntil: '[time]',
     rating: 4.8,
     scoutVerified: true,
-    lat: 40.6716,
+    lat: 40.6716, // placeholder until the real address is set
     lng: -73.9506,
     art: { palette: 'warm', mirror: false },
-    photos: [],
+    photos: ['sample:lalins-storefront', 'sample:lalins-interior', 'sample:lalins-order', 'sample:lalins-pool'],
     amenities: {
-      wifi: 'Secure',
-      outlets: 'Plenty, easy to find',
-      seating: '8 to 12 seats',
-      laptops: 'Welcome until 6 PM',
-      restroom: 'In café',
-      vibe: 'Quiet, natural light',
+      wifi: '[Confirm on visit]',
+      outlets: 'Along the walls',
+      seating: 'Small tables, plus a back patio',
+      laptops: 'Laptops out on our visit',
+      restroom: '[Confirm on visit]',
+      vibe: 'Calm, window light, pool table',
     },
-    tags: ['wifi', 'outlets', 'seats8', 'restroom', 'quiet', 'light', 'calm', 'drinks', 'smallBiz', 'pocOwned'],
-    highlights: ['Quiet', 'Outlets', 'Secure Wi-Fi'],
-    scoutNote: '[Scout note for Koffee, from the visit.]',
+    tags: ['outlets', 'calm', 'light', 'hotFood', 'drinks', 'smallBiz'],
+    highlights: ['Pool table', 'Back patio', 'Hot food'],
+    scoutNote: "[Scout note for Lalin's, from the visit.]",
   },
   {
     id: 'variety',
@@ -108,15 +111,19 @@ export const CAFES = [
 
 // Café of the week editorial content.
 export const FEATURE = {
-  cafeId: 'koffee',
+  cafeId: 'lalins',
   label: 'Café of the week, Nov 2 to 8',
-  photo: 'sample:feature', // test photo; leave null to show the illustration
-  headline: "[Headline sentence on why Koffee is this week's pick.]",
+  photo: 'sample:lalins-storefront', // home hero; leave null to show the illustration
+  headerPhoto: 'sample:lalins-interior', // top of the article
+  orderPhoto: 'sample:lalins-order',
+  headline: "[Headline sentence on why Lalin's is this week's pick.]",
   author: 'Work & Brew scouts',
   readMinutes: 3,
-  space: "[Scout's take on the room: seating, light, and how it feels to settle in for a few hours.]",
+  space:
+    'Leaf-print wallpaper, a paper lantern overhead, and a pool table in the middle of the room. ' +
+    'Small tables line the walls, and a back door opens onto a garden patio. [Scout: add how it feels to settle in for a few hours.]',
   pullQuote: '[A short pull quote from the scout visit or the owner.]',
-  order: '[Signature drink and food picks from the scout visit.]',
+  order: 'Drip coffee and a breakfast burrito with salsa on the side. [Scout: confirm names and add a signature drink.]',
 };
 
 export const FILTER_GROUPS = [
