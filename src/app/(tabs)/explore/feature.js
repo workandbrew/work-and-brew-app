@@ -1,10 +1,11 @@
 // Café of the Week article.
 import { router } from 'expo-router';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CafeArt from '../../../components/CafeArt';
 import { AmenityGrid } from '../../../components/Amenities';
 import { Button, Chip, CircleButton } from '../../../components/ui';
+import { imageSource } from '../../../data/images';
 import { getCafe, getFeature } from '../../../services';
 import { useFocusTimer } from '../../../state/FocusTimer';
 import { colors, fonts, NAV_CLEARANCE } from '../../../theme';
@@ -20,7 +21,7 @@ export default function Feature() {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: colors.bg }} contentContainerStyle={{ paddingBottom: NAV_CLEARANCE + insets.bottom }} showsVerticalScrollIndicator={false}>
       <View style={[s.art, { height: Math.round(Math.min(460, Math.max(260, width * 0.75))) }]}>
-        <CafeArt palette="slate" mirror />
+        {f.photo ? <Image source={imageSource(f.photo)} style={{ width: '100%', height: '100%' }} resizeMode="cover" accessibilityLabel={`${cafe.name} storefront`} /> : <CafeArt palette="slate" mirror />}
         <CircleButton icon="back" label="Go back" style={[s.back, { top: insets.top + 6, left: gutter - 4 }]} onPress={() => router.back()} />
       </View>
       <View style={[s.body, { paddingHorizontal: gutter }]}>

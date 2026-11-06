@@ -21,7 +21,7 @@ export const DEFAULT_STATE = {
     needs: ['Secure Wi-Fi', 'Outlets'],
     memberSince: 'March 2025',
     memberNo: '0001',
-    photoUri: null,
+    photoUri: 'sample:den', // test photo
   },
   saved: [{ cafeId: 'birch', list: 'deep' }],
   tasks: [
@@ -52,7 +52,9 @@ export function AppProvider({ children }) {
         const raw = await AsyncStorage.getItem(KEY);
         if (raw) {
           const saved = JSON.parse(raw);
-          setState((s) => ({ ...s, ...saved, profile: { ...s.profile, ...saved.profile } }));
+          const profile = { ...DEFAULT_STATE.profile, ...saved.profile };
+          if (!profile.photoUri) profile.photoUri = DEFAULT_STATE.profile.photoUri;
+          setState((s) => ({ ...s, ...saved, profile }));
         }
       } catch {}
       loaded.current = true;

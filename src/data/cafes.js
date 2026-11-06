@@ -110,6 +110,7 @@ export const CAFES = [
 export const FEATURE = {
   cafeId: 'koffee',
   label: 'Café of the week, Nov 2 to 8',
+  photo: 'sample:feature', // test photo; leave null to show the illustration
   headline: "[Headline sentence on why Koffee is this week's pick.]",
   author: 'Work & Brew scouts',
   readMinutes: 3,

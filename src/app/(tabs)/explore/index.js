@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { LayoutAnimation, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, LayoutAnimation, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop, Text as SvgText } from 'react-native-svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CafeArt from '../../../components/CafeArt';
@@ -8,6 +8,7 @@ import CafePhoto from '../../../components/CafePhoto';
 import Icon from '../../../components/Icon';
 import { Button, SectionHead } from '../../../components/ui';
 import { getCafe, getFeature, listCafes } from '../../../services';
+import { imageSource } from '../../../data/images';
 import { formatMinutes, useApp, useStats } from '../../../state/AppState';
 import { colors, fonts, NAV_CLEARANCE } from '../../../theme';
 import useLayout from '../../../theme/useLayout';
@@ -29,7 +30,11 @@ export default function Home() {
     <ScrollView style={{ flex: 1, backgroundColor: colors.bg }} contentContainerStyle={{ paddingBottom: NAV_CLEARANCE + insets.bottom }} showsVerticalScrollIndicator={false}>
       {/* Spotlight hero */}
       <View style={[s.hero, { height: heroH }]}>
-        <View style={s.heroArt}><CafeArt palette={cafe.art.palette} mirror={cafe.art.mirror} plant={false} /></View>
+        {feature.photo ? (
+          <Image source={imageSource(feature.photo)} style={[StyleSheet.absoluteFill, { width: "100%", height: "100%" }]} resizeMode="cover" accessibilityLabel={`${cafe.name} storefront`} />
+        ) : (
+          <View style={s.heroArt}><CafeArt palette={cafe.art.palette} mirror={cafe.art.mirror} plant={false} /></View>
+        )}
         <Svg style={StyleSheet.absoluteFill} width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 1 1">
           <Defs>
             <LinearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
@@ -51,7 +56,7 @@ export default function Home() {
               <Icon name="search" size={22} color="#fff" />
             </Pressable>
             <Pressable onPress={() => router.navigate('/profile')} accessibilityLabel="Profile" style={s.avatar}>
-              <Text style={s.avatarText}>{state.profile.name.slice(0, 1).toUpperCase()}</Text>
+              {state.profile.photoUri ? <Image source={imageSource(state.profile.photoUri)} style={s.avatarImg} /> : <Text style={s.avatarText}>{state.profile.name.slice(0, 1).toUpperCase()}</Text>}
             </Pressable>
           </View>
         </View>
@@ -170,7 +175,8 @@ const s = StyleSheet.create({
   logo: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   logoText: { fontFamily: fonts.black, fontSize: 17, color: '#fff', letterSpacing: -0.3 },
   iconBtn: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
-  avatar: { width: 34, height: 34, borderRadius: 17, backgroundColor: colors.navy, alignItems: 'center', justifyContent: 'center' },
+  avatar: { width: 34, height: 34, borderRadius: 17, overflow: 'hidden', backgroundColor: colors.navy, alignItems: 'center', justifyContent: 'center' },
+  avatarImg: { width: 34, height: 34, borderRadius: 17 },
   avatarText: { fontFamily: fonts.bold, fontSize: 14, color: colors.softWhite },
   copy: { position: 'absolute', bottom: 18, alignItems: 'center' },
   tag: { fontFamily: fonts.bold, fontSize: 11.5, letterSpacing: 0.7, color: colors.steel },
