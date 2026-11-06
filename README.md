@@ -34,6 +34,33 @@ Features, architecture, and implementation are evolving as the product is iterat
 
 ---
 
+## ▶️ Run the app
+
+```bash
+npm install
+npx expo start
+```
+
+### On your iPhone or iPad
+1. Install **Expo Go** from the App Store.
+2. Make sure your phone and computer are on the same Wi-Fi.
+3. Run `npx expo start` on your computer and scan the QR code with the iPhone **Camera** app. It opens in Expo Go.
+   If the networks don't match, use `npx expo start --tunnel`.
+
+Edits to the code reload on the device right away. For TestFlight or App Store builds, use EAS: `npx eas-cli@latest build --platform ios`.
+
+### In a browser
+`npx expo start --web`. Handy for quick checks, but the phone is the real test.
+
+## 🗂 Project layout
+- `src/app/`: screens (Expo Router). `(tabs)/` holds Explore, Map, Focus, Saved, and Profile, each with its own stack.
+- `src/components/`: shared UI (nav bar, buttons, café art, map stand-in).
+- `src/theme/`: design tokens from the Spotlight wireframe kit, plus `useLayout` for iPhone → iPad sizing.
+- `src/state/`: app state (saved on the device for now) and the focus timer.
+- `src/services/`: data access. This is where Supabase plugs in. See [docs/BACKEND.md](docs/BACKEND.md).
+
+---
+
 ## 🔐 Security & Data Handling
 Work & Brew is built with privacy and security best practices in mind:
 

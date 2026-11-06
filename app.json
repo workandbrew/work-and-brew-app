@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "Work & Brew",
+    "slug": "work-and-brew",
+    "scheme": "workandbrew",
+    "version": "0.1.0",
+    "orientation": "default",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0E0907",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.workandbrew.app"
+    },
+    "android": {
+      "package": "com.workandbrew.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#17274E",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "output": "single"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": false
+    }
+  }
+}
