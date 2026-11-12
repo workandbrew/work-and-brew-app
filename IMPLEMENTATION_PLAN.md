@@ -83,30 +83,37 @@ Status: ✅ done · 🟡 in progress · ⬜ not started · ⛔ blocked (blocker 
 | 3.10 | Real map: MapLibre with the MapTiler key (already used on the website) + Iris's pin art. Needs a development build. | DIS-1 | ⬜ |
 | 3.11 | Real Terms and Privacy Policy in the app (reuse the website's `/terms` and `/privacy` text, adapted for the app) | ACC-6 | ⬜ |
 
-## Phase 4 — Website launch checklist ⏱ 1–2 days · Owner: Claude; Denisse approves
+## Phase 4 — Website launch checklist · Owner: Claude; Denisse approves
 
-The 20-item pre-launch list. Items 7 (social preview image) and 19 (analytics) are already done.
+The 20-item pre-launch list. Items 7 (social preview image) and 19 (analytics) were already done.
+**Done on branch `launch-checklist` in `work-and-brew-website` (Nov 12): review the Vercel preview, then merge.**
 
-| # | Item | Finding (Nov 12 audit of `work-and-brew-website`) | Status |
+| # | Item | What was done / found | Status |
 | --- | --- | --- | --- |
-| 1 | Privacy policy page | `/privacy` exists (200 lines); review for app + Supabase + GA4 coverage | 🟡 review |
-| 2 | Terms page | `/terms` exists (261 lines) | 🟡 review |
+| 1 | Privacy policy page | `/privacy` exists. It says forms use reCAPTCHA; that's now wired in but **off until the keys are added** (item 18). | 🟡 add keys or edit wording |
+| 2 | Terms page | `/terms` exists (same reCAPTCHA mention) | 🟡 same |
 | 3 | Secrets off the frontend | Service role, Twilio and Brevo keys are server-only (`api/`). The browser has only the public anon and MapTiler keys. | ✅ |
-| 4 | Force HTTPS | Vercel redirects HTTP → HTTPS; add HSTS + security headers in `vercel.json` | ⬜ |
-| 5 | Cookie consent banner | GA4 loads before any consent; add a banner + Google Consent Mode | ⬜ |
-| 6 | Meta titles + descriptions | One title for all pages; no description; add per-page titles and descriptions | ⬜ |
-| 8 | Favicon | Present (`favicon-bear.png`, apple-touch-icon, manifest); add an SVG / ICO fallback | 🟡 |
-| 9 | Sitemap + robots.txt | Missing; hide `/team`, `/ops`, `/dashboard`, `/settings` from search | ⬜ |
-| 10 | Alt text on images | Audit every `<img>`; one decorative `alt=""` found | ⬜ |
-| 11 | Compress images | `public/cafes` is **124 MB**, with 20 `.HEIC` files that Chrome, Firefox and Android can't display; convert to WebP/JPEG at web size | ⬜ |
-| 12 | Page load speed | Measure with Lighthouse on mobile (target: Performance ≥ 80, LCP < 2.5 s) | ⬜ |
-| 13 | Color contrast | Automated (axe) + manual check; fix anything under 4.5:1 | ⬜ |
-| 14 | Mobile friendly | Check 320 px → desktop, no horizontal scroll | ⬜ |
-| 15 | Custom 404 page | `NotFound` page exists; add `noindex`, and fix the wording ("This page is invalid.") | 🟡 |
-| 16 | Fix broken links | Crawl all internal links and assets | ⬜ |
-| 17 | Form validation | Waitlist validates email on the server; check Auth, Suggestion, Scout sign-up, For Owners, Settings | ⬜ |
-| 18 | Spam protection | No bot protection on `/api/subscribe` or scout sign-up; add honeypot + Cloudflare Turnstile + rate limit | ⬜ |
-| 20 | One clear call to action | Review Home: one primary CTA (join waitlist / download the app) | ⬜ |
+| 4 | Force HTTPS | Vercel redirects to HTTPS; added HSTS, nosniff, referrer, same-origin frame and permissions headers | ✅ branch |
+| 5 | Cookie consent banner | GA4 loads only after Accept; choice remembered; "Cookie settings" in the footer | ✅ branch |
+| 6 | Meta titles + descriptions | Per-page titles + descriptions; private pages and 404 set to noindex | ✅ branch |
+| 8 | Favicon | Added a `favicon.ico` fallback | ✅ branch |
+| 9 | Sitemap + robots.txt | Added; private pages disallowed | ✅ branch |
+| 10 | Alt text | All images reviewed; About hero made descriptive | ✅ branch |
+| 11 | Compress images | Café photos 0.6–4.9 MB → 75–290 KB; nav logo 1.5 MB → 36 KB; About hero 0.7 MB → 313 KB. Originals in `public/cafes` (124 MB) untouched. | ✅ branch |
+| 12 | Page load speed | Biggest wins (images, logo) done; run PageSpeed Insights on the live URL after merge (the cloud sandbox can't reach the map tiles or fonts) | 🟡 measure live |
+| 13 | Color contrast | axe: 0 WCAG AA violations on all public pages (login labels were 1.4:1) | ✅ branch |
+| 14 | Mobile friendly | No horizontal scroll at 320 / 390 / 768 / 1280 px | ✅ |
+| 15 | Custom 404 page | Clearer copy + noindex | ✅ branch |
+| 16 | Fix broken links | 8 broken café photos fixed; 0 broken internal links; 9 About drink images don't exist yet and now fall back to initials | ✅ branch (drink art pending) |
+| 17 | Form validation | Trimmed-input checks, length limits, screen-reader labels | ✅ branch |
+| 18 | Spam protection | Honeypot on all forms, rate limit on the waitlist API, reCAPTCHA v3 ready (needs `VITE_RECAPTCHA_SITE_KEY` + `RECAPTCHA_SECRET_KEY` in Vercel) | ✅ branch (keys pending) |
+| 20 | One clear call to action | Waitlist page: "Sign Up for Early Access" is the single primary button | ✅ |
+| + | Map pop-ups | Spreadsheet text is now escaped (prevented HTML injection) | ✅ branch |
+
+Website follow-ups:
+- The countdown ends **Nov 12, 8 PM ET**, but the Coming Soon gate has no automatic unlock. Logged-out visitors keep seeing it at 00:00:00 until the code changes.
+- The nav logo is light-on-light on the cream navbar (pre-existing).
+- 3 tests and 2 lint errors were already failing on `main`.
 
 ## Phase 5 — Store readiness ⏱ start now, runs in parallel · Owner: Denisse; Claude for config
 
