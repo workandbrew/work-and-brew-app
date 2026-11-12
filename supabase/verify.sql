@@ -1,6 +1,6 @@
 -- Work & Brew: read-only check to run AFTER the security script. Changes nothing.
 select json_build_object(
-  'cafes_rules', (select json_agg(policyname order by policyname) from pg_policies where schemaname = 'public' and tablename = 'cafes'),
+  'cafes_rules', (select json_agg(policyname || ' (' || lower(permissive) || ')' order by policyname) from pg_policies where schemaname = 'public' and tablename = 'cafes'),
   'profiles_rules', (select json_agg(policyname order by policyname) from pg_policies where schemaname = 'public' and tablename = 'profiles'),
   'open_rules_left', (
     select coalesce(json_agg(tablename || ': ' || policyname), '[]') from pg_policies

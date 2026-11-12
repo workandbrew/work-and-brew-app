@@ -6,9 +6,10 @@
 -- What it does
 --   1. Safety check: stops if a team member's email isn't confirmed (they'd lose access).
 --   2. Team check requires a confirmed email (no spoofing via unconfirmed sign-ups).
---   3. Fixes the sign-up trigger (it pointed at columns that don't exist).
---   4. Cafés: removes "any logged-in user can edit/delete" and "anyone can read" rules.
---      Team keeps full access. App users read a safe view of PUBLISHED cafés only,
+--   3. Fixes the sign-up trigger (it pointed at columns that don't exist). Handles both
+--      website sign-ups (preferred_name / username) and app sign-ups (name).
+--   4. Cafés: removes the open "Auth insert/update/delete/read" rules and keeps the
+--      restrictive "Only team members" rule, so only the team can use the raw table. App users read a safe view of PUBLISHED cafés only,
 --      without internal columns (assigned_to, scout_name, notes, status, source).
 --   5. Profiles: removes "viewable by everyone". People see only their own profile
 --      (emails stay private); team can read profiles for the hub.
@@ -17,6 +18,8 @@
 --   8. Photo storage: private profile photos, team-managed café photos.
 --   9. "Delete my account" function for app users.
 -- Nothing is dropped except the four open café rules and two profile rules listed below.
+-- Not affected: the website's public map (reads the Google Sheet feed / markers.csv) and the
+-- hub's server code (uses the service role key on Vercel, which bypasses these rules).
 -- =====================================================================
 begin;
 
@@ -71,8 +74,12 @@ begin
   values (
     new.id,
     new.email,
-    coalesce(new.raw_user_meta_data ->> 'name', new.raw_user_meta_data ->> 'full_name', split_part(new.email, '@', 1)),
-    coalesce(new.raw_user_meta_data ->> 'signup_source', 'app')
+    coalesce(new.raw_user_meta_data ->> 'preferred_name', new.raw_user_meta_data ->> 'name',
+             new.raw_user_meta_data ->> 'full_name', new.raw_user_meta_data ->> 'username',
+             split_part(new.email, '@', 1)),
+    coalesce(new.raw_user_meta_data ->> 'signup_source',
+             case when new.raw_user_meta_data ? 'preferred_name' or new.raw_user_meta_data ? 'username'
+                  then 'website' else 'app' end)
   )
   on conflict do nothing;
   return new;
@@ -104,8 +111,12 @@ drop policy if exists "Auth insert" on public.cafes;
 drop policy if exists "Auth update" on public.cafes;
 drop policy if exists "Auth delete" on public.cafes;
 drop policy if exists "Auth read" on public.cafes;
-drop policy if exists "Only team members" on public.cafes; -- duplicate of the rule below
 -- Kept: "Team members can use cafes" (authenticated, is_team_member()).
+-- Re-created to be sure it is RESTRICTIVE (website repo: supabase/cafes-team-only.sql):
+-- whatever other rules exist, non-team users are always blocked from the raw table.
+drop policy if exists "Only team members" on public.cafes;
+create policy "Only team members" on public.cafes as restrictive
+  for all to anon, authenticated using (public.is_team_member()) with check (public.is_team_member());
 
 -- The app reads this view. It runs with the owner's rights, so it is the ONLY
 -- way non-team users see cafés, and it exposes published rows and safe columns only.

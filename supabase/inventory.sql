@@ -17,7 +17,7 @@ select json_build_object(
   ),
   'policies', (
     select coalesce(json_agg(json_build_object(
-      'table', tablename, 'name', policyname, 'command', cmd,
+      'table', tablename, 'name', policyname, 'command', cmd, 'kind', lower(permissive),
       'roles', roles, 'using', qual, 'check', with_check)), '[]')
     from pg_policies where schemaname in ('public', 'storage')
   ),
